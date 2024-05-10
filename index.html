@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html>
-<head><!-- 裏設定エリアの開始 -->
-    <meta charset="utf-8"><!-- 文字化け防止 -->
-</head><!-- 裏設定エリアの終了 -->
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズ</title>
+</head>
+<body>
 
-<body><!-- 画面に表示されるエリアの開始 -->
-    Hello World！
-</body><!-- 画面に表示されるエリアの終了 -->
+<div>
+    <h2>クイズ</h2>
+    <form id="quizForm">
+        <label for="name">名前:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <p id="question">ここにクイズの質問が表示されます。</p>
+        <input type="text" id="answer" name="answer" required>
+        <button type="button" onclick="checkAnswer()">解答</button>
+    </form>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "日本の首都は？",
+            answer: "東京"
+        },
+        {
+            question: "1+1は？",
+            answer: "2"
+        }
+        // 他のクイズデータをここに追加
+    ];
+
+    let currentQuestion = 0;
+    const questionElement = document.getElementById("question");
+    const answerInput = document.getElementById("answer");
+
+    function showQuestion() {
+        questionElement.textContent = quizData[currentQuestion].question;
+        answerInput.value = ""; // 解答欄を空にする
+    }
+
+    function checkAnswer() {
+        const userAnswer = answerInput.value.trim();
+        const correctAnswer = quizData[currentQuestion].answer;
+
+        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+            alert("正解です！");
+        } else {
+            alert("不正解です。もう一度お試しください。");
+        }
+
+        // 次の質問を表示するか終了するかを判断
+        if (currentQuestion < quizData.length - 1) {
+            currentQuestion++;
+            showQuestion();
+        } else {
+            alert("クイズ終了です。お疲れ様でした！");
+            // メール送信のコードをここに追加（サーバーサイドで実装が必要）
+        }
+    }
+
+    // 最初の質問を表示
+    showQuestion();
+</script>
+
+</body>
 </html>
