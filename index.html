@@ -9,12 +9,12 @@
 
 <div>
     <h2>クイズ</h2>
-    <form id="quizForm" method="post" action="">
+    <form id="quizForm">
         <label for="name">名前:</label>
         <input type="text" id="name" name="name" required><br><br>
         <p id="question">ここにクイズの質問が表示されます。</p>
         <input type="text" id="answer" name="answer" required>
-        <button type="submit" name="submit">解答</button>
+        <button type="button" onclick="checkAnswer()">解答</button>
     </form>
 </div>
 
@@ -40,9 +40,30 @@
         answerInput.value = ""; // 解答欄を空にする
     }
 
+    function checkAnswer() {
+        const userAnswer = answerInput.value.trim();
+        const correctAnswer = quizData[currentQuestion].answer;
+
+        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+            alert("正解です！");
+        } else {
+            alert("不正解です。もう一度お試しください。");
+        }
+
+        // 次の質問を表示するか終了するかを判断
+        if (currentQuestion < quizData.length - 1) {
+            currentQuestion++;
+            showQuestion();
+        } else {
+            alert("クイズ終了です。お疲れ様でした！");
+            // メール送信のコードをここに追加（サーバーサイドで実装が必要）
+        }
+    }
+
     // 最初の質問を表示
     showQuestion();
 </script>
 
 </body>
 </html>
+
