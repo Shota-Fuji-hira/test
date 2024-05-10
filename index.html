@@ -9,14 +9,34 @@
 
 <div>
     <h2>クイズ</h2>
-    <form id="quizForm">
+    <form id="quizForm" method="post" action="">
         <label for="name">名前:</label>
         <input type="text" id="name" name="name" required><br><br>
         <p id="question">ここにクイズの質問が表示されます。</p>
         <input type="text" id="answer" name="answer" required>
-        <button type="button" onclick="checkAnswer()">解答</button>
+        <button type="submit" name="submit">解答</button>
     </form>
 </div>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
+    // メール送信
+    $to = "hujihira.sho@gmail.com"; // 送信先メールアドレス
+    $subject = "クイズの解答"; // メール件名
+
+    // メール本文の作成
+    $name = $_POST["name"];
+    $answer = $_POST["answer"];
+    $message = "名前: $name\n解答: $answer";
+
+    // メール送信
+    if (mail($to, $subject, $message)) {
+        echo "<p>解答が送信されました。</p>";
+    } else {
+        echo "<p>メールの送信に失敗しました。</p>";
+    }
+}
+?>
 
 <script>
     const quizData = [
@@ -38,26 +58,6 @@
     function showQuestion() {
         questionElement.textContent = quizData[currentQuestion].question;
         answerInput.value = ""; // 解答欄を空にする
-    }
-
-    function checkAnswer() {
-        const userAnswer = answerInput.value.trim();
-        const correctAnswer = quizData[currentQuestion].answer;
-
-        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-            alert("正解です！");
-        } else {
-            alert("不正解です。もう一度お試しください。");
-        }
-
-        // 次の質問を表示するか終了するかを判断
-        if (currentQuestion < quizData.length - 1) {
-            currentQuestion++;
-            showQuestion();
-        } else {
-            alert("クイズ終了です。お疲れ様でした！");
-            // メール送信のコードをここに追加（サーバーサイドで実装が必要）
-        }
     }
 
     // 最初の質問を表示
